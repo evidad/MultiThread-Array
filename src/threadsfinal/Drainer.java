@@ -8,16 +8,24 @@ package threadsfinal;
  *
  * @author errol
  */
+/**
+ * A Java class Drainer that inherits from the Runnable interface. Override and
+ * implement the classes run() method in which the thread runs every 5
+ * milliseconds and clears the array sorted by the Sorter thread. It must only
+ * attempt to perform the clear operation after the filling was done by
+ * Generator thread and sorting by the Sorter thread was done by the first 2
+ * threads. (1.5 pts)
+ */
 public class Drainer implements Runnable {
 
     private final Simulation simulation;
 
     public Drainer(Simulation simulation) {
-        this.simulation = simulation;  // Simulation object that holds the array
+        this.simulation = simulation;
     }
 
     public synchronized void clearList() {
-        simulation.clearArray(); // Clears the list in the Simulation object
+        simulation.clearArray();
         System.out.println("Array cleared.");
     }
 
@@ -25,23 +33,18 @@ public class Drainer implements Runnable {
     public void run() {
         while (true) {
             synchronized (simulation) {
-                // Wait until the array has been filled and sorted
                 while (simulation.getArraySize() != 10 || !simulation.isSorted()) {
                     try {
-                        simulation.wait();  // Wait until both conditions are met
+                        simulation.wait();
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                     }
                 }
 
-                // Once the array is sorted and filled, clear it
                 clearList();
-
-                // Notify all threads that the array has been cleared
                 simulation.notifyAll();
             }
 
-            // Sleep for 5 milliseconds between iterations
             try {
                 Thread.sleep(5);
             } catch (InterruptedException e) {

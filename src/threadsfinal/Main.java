@@ -12,10 +12,10 @@ public class Main {
 
     public static void main(String[] args) {
         Simulation simulation = new Simulation();
-        
-        simulation.runsim(1);      
-        simulation.runsim(2);   
+
+        simulation.runsim(1);
+        simulation.runsim(2);
         simulation.runsim(5);
     }
-    
+
 }
